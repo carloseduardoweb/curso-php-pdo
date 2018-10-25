@@ -1,17 +1,28 @@
 <?php
+require_once 'classes/Conexao.php';
 
-class Categoria
-{
+class Categoria {
 
-    public $id;
-    public $nome;
+    private $conexao;
+    private $nome;
 
-    public function listar()
-    {
+    public function __construct() {
+        $this->conexao = Conexao::getInstance();
+    }
+
+    public function setNome($nome) {
+        $this->nome = $nome;
+    }
+
+    public function listar() {
         $query = "SELECT id, nome FROM categorias";
-        $conexao = new PDO('mysql:host=127.0.0.1;dbname=estoque', 'root', 'alura');
-        $resultado = $conexao->query($query);
+        $resultado =  $this->conexao->query($query);
         $lista = $resultado->fetchAll();
         return $lista;
+    }
+
+    public function inserir() {
+        $query = "INSERT INTO categorias (nome) values ('$this->nome')";
+        return $this->conexao->exec($query);
     }
 }
